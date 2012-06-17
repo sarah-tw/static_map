@@ -1,0 +1,100 @@
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Google Static Map Generator</title>
+    <script type="text/javascript" charset="utf-8" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <style type="text/css" media="screen">
+      #google_map {
+      
+      }
+      
+      #map_container, #map_url {
+        display: inline-block;
+        padding: 10px;
+        background-color: #eee;
+      }
+    </style>
+    <script type="text/javascript" charset="utf-8">
+      var google = "http://maps.googleapis.com/maps/api/staticmap?sensor=true&"
+      
+      $(function(){
+        $(".mker_modle").hide();
+        $("#btn_generate").click(function() {
+          size = $("#config_width").val() + "x" + $("#config_height").val(); 
+          scale = $("#config_scale").val();
+          center = $("#config_center").val();
+          maptype = $("#config_maptype").val();
+          marker = $(".config_marker").val();
+          var markers = ""
+          $(".mker_area .config_mker").each(function(index, element) {
+            markers += "&markers=color:" + $(element).find(".config_mker_color").val() + "%7Csize:" + $(element).find(".config_mker_size").val() + "%7C" + $(element).find(".config_mker_city").val();            
+          });
+          language = $("#config_language").val();
+          src = google + "size=" + size + "&scale=" + scale + "&center=" + center + "&maptype=" + maptype + "&language=" + language + markers;
+          $("#google_map").attr("src", src);
+          $("#map_url").html(src);
+        });
+        $("#mker_button").click(function() {
+          content = $(".mker_modle").html();
+          $(".mker_area").append(content);
+        })
+      })
+      
+    </script>
+  </head>
+  
+  <body>
+    <h1>Google Static Map Generator</h1>
+    <div class="controls">
+      <label>Center</label>      
+      <input type="text" id="config_center" value="Beijing"/>
+      <label>Maptype</label>
+      <select id="config_maptype" value="roadmap">
+        <option value ="roadmap">roadmap</option>
+        <option value ="terrain">terrain</option>
+        <option value="satellite">satellite</option>
+        <option value="hybrid">hybrid</option>
+      </select>
+      
+      <label>Size</label>
+      <input type="number" id="config_width" value="600" min="100" max="700"/>X<input type="number" id="config_height" value="300" min="100" max="700"/>
+      <label>Scale</label>
+      <select id="config_scale">
+        <option value ="1">1</option>
+        <option value ="2">2</option>
+      </select>
+      <label>Language</label>
+      <select id="config_language" value="zh-CN">
+        <option value ="en">en</option>
+        <option value ="zh-CN">zh-CN</option>
+      </select>
+      
+      <div class="mker_area"></div>
+      <button id="mker_button">Add a marker</button>
+      <div class="mker_modle" style="display: none;">
+        <div class="config_mker">
+          <label>City or coordinate</label><input type="text" class="config_mker_city"/>
+          <label>Color</label><input type="text" class="config_mker_color" value="red"/>
+          <label>Size</label>
+          <select class="config_mker_size"> 
+            <option value="mid">mid</option>
+            <option value="tiny">tiny</option>
+            <option value="small">small</option>
+          </select>
+        </div>
+      </div>
+      
+      
+      
+      <button id="btn_generate">Generate Map</button>
+    </div>
+    <div id="map_container">
+      <img src="http://maps.googleapis.com/maps/api/staticmap?sensor=true&size=600x300&center=Beijing&maptype=roadmap&markers=Beijing" id="google_map"/>
+    </div>
+    <div id="map_url">
+     
+    </div>
+    
+  </body>
+  
+</html>
